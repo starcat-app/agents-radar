@@ -1,0 +1,118 @@
+{
+  "zh": {
+    "ai-cli": [
+      "Claude Code 24小时记录49个issue和2个PR",
+      "OpenCode 与 Qwen Code 发布新版本",
+      "静默挂起与状态掩盖成 CLI 主要担忧",
+      "提示缓存与上下文经济引发争论",
+      "Windows/Wayland 回归影响七款工具中的五款",
+      "开放贡献流程超越闭源核心"
+    ],
+    "ai-agents": [
+      "OpenClaw 24小时收到170个issue和500个PR",
+      "OpenClaw 发布 v2026.10.9 安全补丁",
+      "补丁强化 MCP URI 与 Zod 输入验证",
+      "IMAP 发件人解析迁移至 nodemailer 10.1.4",
+      "P0/P1 可靠性问题仍未解决",
+      "会话状态与崩溃恢复占据队列主导"
+    ],
+    "ai-infra": [
+      "vLLM 与 SGLang 未发版，聚焦 KV cache",
+      "KV-cache 复用成多租户隔离问题",
+      "SM120 Blackwell 在 vLLM/SGLang 缺 sparse-MLA 内核",
+      "vLLM 24小时记录21个issue和12个PR",
+      "SGLang 24小时记录18个issue和18个PR",
+      "Agent 工具调用缺口影响服务引擎与网关"
+    ],
+    "ai-trending": [
+      "Agent 工具占据11个热门仓库中的9个",
+      "impeccable 今日以+2,881星领跑",
+      "AI 设计技能仓库新增1,178和1,037星",
+      "claude-mem 达104,525星，今日+459",
+      "DeepTutor 垂直 Agent 新增+1,926星",
+      "Memory/RAG 集群包括 mem0 与 Cognee"
+    ],
+    "ai-web": [
+      "Anthropic 详解 Managed Agents 稳定接口",
+      "Anthropic 赢 GSA 协议，产品折扣40%",
+      "Anthropic 将 AI for Science 扩展至机构",
+      "Claude Code 最佳实践文章是文档迁移",
+      "OpenAI 更新 Model Spec 与失调检测",
+      "OpenAI 条目仅标题，无文章正文"
+    ],
+    "ai-hn": [
+      "Mistral Large 4 开放权重以765分登顶 HN",
+      "Gemini 4 Carbon 发布获990分、791条评论",
+      "OpenAI 科学发现文章获1,153分",
+      "Claude Code 后台 Agent 记录隐私引争议",
+      "OpenAI 经 CPU 缓存的 Agent 引发245条评论",
+      "肯塔基人文主义者赢得 AI 宗教豁免"
+    ],
+    "ai-community": [
+      "日志文件提示注入风险登顶 Dev.to",
+      "人工审批作为安全边界受质疑",
+      "LLM 更佳代码主张取决于你的指标",
+      "开源 AI 发现未使用的 Prime Video 扣费",
+      "编码 Agent 令 Git 与评审流程承压",
+      "Lobste.rs 权衡模糊测试与 AI 安全研究"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "Claude Code logs 49 issues, 2 PRs in 24h",
+      "OpenCode and Qwen Code shipped new releases",
+      "Silent hangs and masked status top CLI concerns",
+      "Prompt-cache and context economics drive debate",
+      "Windows/Wayland regressions hit five of seven tools",
+      "Open contributor pipelines outpace closed cores"
+    ],
+    "ai-agents": [
+      "OpenClaw sees 170 issues and 500 PRs in 24h",
+      "OpenClaw ships v2026.10.9 security patch",
+      "Patch hardens MCP URI and Zod input validation",
+      "IMAP sender parsing moves to nodemailer 10.1.4",
+      "P0/P1 reliability issues remain open",
+      "Session state and crash recovery dominate queue"
+    ],
+    "ai-infra": [
+      "vLLM and SGLang ship no releases, focus on KV cache",
+      "KV-cache reuse becomes multi-tenant isolation problem",
+      "SM120 Blackwell lacks sparse-MLA kernels in vLLM/SGLang",
+      "vLLM logs 21 issues and 12 PRs in 24h",
+      "SGLang logs 18 issues and 18 PRs in 24h",
+      "Agent tool-calling gaps hit serving engines and gateways"
+    ],
+    "ai-trending": [
+      "Agent tooling dominates 9 of 11 trending repos",
+      "impeccable leads with +2,881 stars today",
+      "AI design skills repos add 1,178 and 1,037 stars",
+      "claude-mem hits 104,525 stars, +459 today",
+      "DeepTutor vertical agent gains +1,926 stars",
+      "Memory/RAG cluster includes mem0 and Cognee"
+    ],
+    "ai-web": [
+      "Anthropic details Managed Agents stable interfaces",
+      "Anthropic wins GSA deal with 40% product discount",
+      "Anthropic expands AI for Science to institutions",
+      "Claude Code best practices post is docs migration",
+      "OpenAI updates Model Spec and misalignment detection",
+      "OpenAI items are titles only, no article text"
+    ],
+    "ai-hn": [
+      "Mistral Large 4 open weights tops HN at 765 points",
+      "Gemini 4 Carbon launch draws 990 points, 791 comments",
+      "OpenAI scientific discoveries post hits 1,153 points",
+      "Claude Code background-agent transcript privacy debated",
+      "OpenAI agents via CPU cache sparks 245 comments",
+      "Kentucky humanist wins AI religious exemption"
+    ],
+    "ai-community": [
+      "Log-file prompt injection risk tops Dev.to",
+      "Human approval is questioned as security boundary",
+      "LLM better-code claims depend on your metric",
+      "Open-source AI catches unused Prime Video charge",
+      "Coding agents strain Git and review workflows",
+      "Lobste.rs weighs fuzzing versus AI security research"
+    ]
+  }
+}
