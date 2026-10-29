@@ -1,9 +1,11 @@
 # 安装为受控 fork 的 .github/workflows/daily-digest.yml，替换上游同名流程。
-# 首次仅手动运行；真实内容与 API 发布验收后，再由维护者单独开启每日 cron。
+# 首轮端到端验收后启用每日调度；上海业务日期用于生成身份，实际完成时间可能延后。
 name: Starcat Daily Radar
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "37 22 * * *"
 
 permissions:
   contents: write

@@ -13,7 +13,7 @@
 | `daily-digest.yml` | `.github/workflows/daily-digest.yml`，替换原同名文件 |
 | `README.md` | `scripts/starcat/README.md` |
 
-必须替换上游同名 workflow，不能另留一个仍按 cron 调用 Qwen、创建 Issues 的旧生成流程。保留上游许可证和版权声明，以及原有 CI。模板当前只有 `workflow_dispatch`，首轮真实生成与服务发布验收完成后，再单独添加定时触发；不要把本地测试通过当成定时任务已启用。
+必须替换上游同名 workflow，不能另留一个仍按 cron 调用 Qwen、创建 Issues 的旧生成流程。保留上游许可证和版权声明，以及原有 CI。工作流提供手动触发和 UTC `37 22 * * *` 定时触发，即上海时间每日 06:37；首次安装先仅保留手动入口，真实生成与服务发布验收通过后再启用定时配置。触发时间不等于完成时间；仅本地模板包含 cron 不代表远端已经启用，须核对默认分支中的已推送配置。
 
 需要的 GitHub Secrets：
 
