@@ -1,73 +1,34 @@
-name: Daily Agents Radar
+# 安装为受控 fork 的 .github/workflows/daily-digest.yml，替换上游同名流程。
+# 首次仅手动运行；真实内容与 API 发布验收后，再由维护者单独开启每日 cron。
+name: Starcat Daily Radar
 
 on:
-  schedule:
-    # 22:37 UTC daily = 06:37 CST (UTC+8) the next day. A ~20 min run started
-    # then lands the digest around 07:00 CST, which is when it is expected.
-    #
-    # The minute is deliberately off the hour. GitHub queues scheduled runs and
-    # drops them under load, and the :00 slot is the most contended one. At
-    # "0 23 * * *" this workflow degraded badly in August 2026: the 08-26 run
-    # was dispatched 5h07m late and the 08-27 run was never created at all.
-    # qwen-flash has flat pricing, so moving the slot costs nothing (it would
-    # have, under DeepSeek's peak/off-peak scheme).
-    - cron: "37 22 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
-  issues: write
 
-# A late scheduled run must not overlap a manual catch-up run: both would build
-# the same CST day's digest and open a duplicate set of issues (as happened on
-# 2026-08-27, which produced 18 duplicates). Queue rather than cancel, so the
-# scheduled run reaches the guard job below only after the manual one has
-# committed its digest — and then skips.
 concurrency:
-  group: daily-digest
+  group: starcat-daily-radar
   cancel-in-progress: false
 
 jobs:
-  guard:
+  generate-and-publish:
     runs-on: ubuntu-latest
-    outputs:
-      should_run: ${{ steps.check.outputs.should_run }}
-
+    timeout-minutes: 120
+    # 只运行受控 fork 的默认分支，避免从其他分支发布不同的生成逻辑。
+    if: github.ref_name == github.event.repository.default_branch
     steps:
-      - name: Skip a scheduled run when today's digest already exists
-        id: check
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ "${{ github.event_name }}" != "schedule" ]; then
-            echo "Event is ${{ github.event_name }} — manual runs always proceed."
-            echo "should_run=true" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          # CST date, matching the digests/YYYY-MM-DD/ folder produced by toCstDateStr
-          DATE=$(TZ=Asia/Shanghai date +%Y-%m-%d)
-          if gh api "repos/${{ github.repository }}/contents/digests/$DATE" --silent 2>/dev/null; then
-            echo "digests/$DATE is already committed — a manual run covered today. Skipping."
-            echo "should_run=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "No digests/$DATE yet — proceeding."
-            echo "should_run=true" >> "$GITHUB_OUTPUT"
-          fi
-
-  digest:
-    needs: guard
-    if: needs.guard.outputs.should_run == 'true'
-    runs-on: ubuntu-latest
-    # Web content fetching adds ~60-120 s of HTTP requests on incremental runs;
-    # the first-ever run (fetching 50 articles) may need up to 20 min.
-    timeout-minutes: 40
-
-    steps:
-      - name: Checkout
+      - name: Checkout controlled source
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.9
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -75,61 +36,84 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - name: Install dependencies
+      - name: Validate publishing configuration
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DAILY_RADAR_ADMIN_API_KEY: ${{ secrets.DAILY_RADAR_ADMIN_API_KEY }}
+          DAILY_RADAR_API_URL: ${{ vars.DAILY_RADAR_API_URL || 'https://starcat-api.fly.dev' }}
+        run: |
+          node --input-type=module <<'NODE'
+          for (const name of ["DEEPSEEK_API_KEY", "DAILY_RADAR_ADMIN_API_KEY", "DAILY_RADAR_API_URL"]) {
+            if (!process.env[name]) throw new Error(`${name} is required`);
+          }
+          const url = new URL(process.env.DAILY_RADAR_API_URL);
+          if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash || url.pathname !== "/") {
+            throw new Error("DAILY_RADAR_API_URL must be an HTTPS origin");
+          }
+          NODE
+
+      - name: Determine today's generation state
+        id: edition
+        run: |
+          DATE=$(TZ=Asia/Shanghai date +%Y-%m-%d)
+          COMMIT=$(git rev-parse HEAD)
+          printf 'date=%s\n' "$DATE" >> "$GITHUB_OUTPUT"
+          node scripts/starcat/publish.mjs status --commit "$COMMIT" --date "$DATE" >> "$GITHUB_OUTPUT"
+
+      - name: Verify publication adapter
+        run: node --test scripts/starcat/publish.test.mjs
+
+      - name: Install generator dependencies
+        if: steps.edition.outputs.ready != 'true'
         run: pnpm install --frozen-lockfile
 
-      - name: Run daily digest
+      - name: Prepare current-day generation
+        if: steps.edition.outputs.ready != 'true'
+        env:
+          EDITION_DATE: ${{ steps.edition.outputs.date }}
+        run: |
+          SEQUENCE=$((GITHUB_RUN_NUMBER * 1000 + GITHUB_RUN_ATTEMPT))
+          node scripts/starcat/publish.mjs prepare --date "$EDITION_DATE" --sequence "$SEQUENCE"
+
+      - name: Generate reports using DeepSeek
+        if: steps.edition.outputs.ready != 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LLM_PROVIDER: qwen
-          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+          LLM_PROVIDER: deepseek
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_MODEL: deepseek-flash
           PRODUCTHUNT_TOKEN: ${{ secrets.PRODUCTHUNT_TOKEN }}
-          DIGEST_REPO: ${{ github.repository }}
+          # 仅写日报文件，不创建 Issues，也不触发上游通知。
+          DIGEST_REPO: ""
         run: pnpm start
 
-      - name: Commit digest files
+      - name: Seal successful generation and update indexes
+        if: steps.edition.outputs.ready != 'true'
+        env:
+          EDITION_DATE: ${{ steps.edition.outputs.date }}
+        run: |
+          node scripts/starcat/publish.mjs seal --date "$EDITION_DATE"
+          pnpm manifest
+
+      - name: Commit and push generated files before publication
+        if: steps.edition.outputs.ready != 'true'
+        env:
+          EDITION_DATE: ${{ steps.edition.outputs.date }}
+          TARGET_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add digests/
-          if git diff --cached --quiet; then
-            echo "No new digest files to commit"
-          else
-            # CST date, matching the digests/YYYY-MM-DD/ folder produced by toCstDateStr
-            DATE=$(TZ=Asia/Shanghai date +%Y-%m-%d)
-            git commit -m "digest: ${DATE} daily digest"
-            git pull --rebase
-            git push
-          fi
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- "digests/$EDITION_DATE" digests/web-state.json manifest.json feed.xml
+          git diff --cached --quiet && { echo "Generation produced no committed changes"; exit 1; }
+          git commit -m "digest: ${EDITION_DATE} Starcat daily radar"
+          git pull --rebase origin "$TARGET_BRANCH"
+          git push origin "HEAD:$TARGET_BRANCH"
 
-      - name: Update web manifest
-        run: pnpm manifest
-
-      - name: Commit manifest and feed
+      - name: Publish committed reports and wait for completion
+        env:
+          EDITION_DATE: ${{ steps.edition.outputs.date }}
+          DAILY_RADAR_API_URL: ${{ vars.DAILY_RADAR_API_URL || 'https://starcat-api.fly.dev' }}
+          DAILY_RADAR_ADMIN_API_KEY: ${{ secrets.DAILY_RADAR_ADMIN_API_KEY }}
         run: |
-          git add manifest.json feed.xml
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: update manifest.json"
-            git pull --rebase
-            git push
-          fi
-
-      - name: Send Telegram notification
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID || '@agents_radar' }}
-          PAGES_URL: https://duanyytop.github.io/agents-radar
-        run: pnpm notify
-
-      - name: Send Feishu notification
-        env:
-          FEISHU_WEBHOOK_URLS: ${{ secrets.FEISHU_WEBHOOK_URLS }}
-          PAGES_URL: https://duanyytop.github.io/agents-radar
-        run: pnpm notify:feishu
-
-      - name: Close stale issues
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          DIGEST_REPO: ${{ github.repository }}
-        run: pnpm close-stale
-
+          COMMIT=$(git rev-parse HEAD)
+          node scripts/starcat/publish.mjs publish --date "$EDITION_DATE" --commit "$COMMIT" --apply
