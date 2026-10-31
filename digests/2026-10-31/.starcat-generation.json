@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "source_repository": "starcat-app/agents-radar",
+  "edition_date": "2026-10-31",
+  "source_sequence": 3001,
+  "generated_at": "2026-10-31T00:25:46.133Z",
+  "files": {
+    "ai-agents-en.md": "0bafcc3895e241f21f079f58dcbc5ff40488a67b724a22738d68fba93432f944",
+    "ai-agents.md": "b41abff005a5577d1ab136bd22517f0ace2ae2399f948390096249e1747f9844",
+    "ai-arxiv-en.md": "79045ed5d04a997bcf7136147d42571dcafd4bf9c155e5da0ed09ac965325b97",
+    "ai-arxiv.md": "40168f060a777d2dc374eed995e3e0da1478f419bf9cc650f077ada05dcd54d2",
+    "ai-cli-en.md": "66d1ea98b1b05fd96749ed165c802b0efbea351360d311e142b76a36b4c3479c",
+    "ai-cli.md": "b5fa4a227aa0988862deaa35a97e367caf40a320e8eae4b3e467696abd88b3a5",
+    "ai-community-en.md": "c76d31671262da042b7cfa1f8a17dfad83c87c6fd3eb09eccb981101238ea621",
+    "ai-community.md": "1c3f3533560f4f0f1139d09e24398a5392fa3f5095ec799d735981f15b624550",
+    "ai-hn-en.md": "435370fe4e2da9f57b8ce635febd02b150760ed1b512f2254eaade8f38a6b8a0",
+    "ai-hn.md": "0b4f08d6ad311a11043ea3321481fb82b4472b48e662a0e84abfa824d562c505",
+    "ai-infra-en.md": "98da65d40e3bf9edb1aac7ca771f9ae92efd783538f334c083e1331cb0ea2491",
+    "ai-infra.md": "eeac081a7e8a10cb011b32ee8676f7832057dc98d167dce3b8d3da24d32433c5",
+    "ai-trending-en.md": "1010b29785e18b7dbac6a7f5e9b6620f65146af14995692debaaad2507f8fd54",
+    "ai-trending.md": "4f5a541841a504b175ddfbc6991d69e8761ec1fa5a090adccb49dd4bfc28d193",
+    "ai-web-en.md": "296e285d2f4c48d1799325364d6861c334599902099e87094f53d5102543e284",
+    "ai-web.md": "d803c8a27657d162ff6b9d8db7f61b57f07cffdf9d534c448c0831274dbd553b"
+  },
+  "highlights_sha256": "14187466b01f0cdd2504bb276473e2bb74c394d1f38e9d0ba40969cc1191b4c7"
+}

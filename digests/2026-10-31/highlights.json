@@ -1,0 +1,134 @@
+{
+  "zh": {
+    "ai-cli": [
+      "OpenCode 24小时内发布三个版本",
+      "Claude Code、Gemini CLI 各发布一个版本",
+      "Codex、Copilot CLI、Pi 均未发布版本",
+      "生产加固主导 AI CLI 工具",
+      "Windows/WSL 行为是主要摩擦点",
+      "MCP/插件 生命周期可靠性是关键战场"
+    ],
+    "ai-agents": [
+      "OpenClaw 出现86个问题和500次PR更新",
+      "264个 OpenClaw PR 已合并/关闭；236个仍开放",
+      "OpenClaw beta 恢复 Node 安装兼容性",
+      "P0/P1 缺陷影响 Windows、macOS 认证与会话",
+      "转录脱敏是发布阻塞问题",
+      "维护者审查带宽限制 OpenClaw"
+    ],
+    "ai-infra": [
+      "llama.cpp 发布 b12002 至 b12017 构建",
+      "llama.cpp 出现51个问题和125次PR更新",
+      "LiteLLM 出现112个问题和472次PR更新",
+      "LiteLLM 发布 v1.109.0-dev.2 预发布版",
+      "静默正确性故障居基础设施严重性之首",
+      "vLLM、SGLang、Ollama 均未发布版本"
+    ],
+    "ai-trending": [
+      "claude-mem 今日新增 +1,140 星标",
+      "impeccable 以 +2,300 星标领跑 AI 趋势",
+      "DeepTutor 今日新增 +2,282 星标",
+      "jailbreaks 红队仓库新增 +2,055 星标",
+      "career-ops 拥有 78,898 个 GitHub 星标",
+      "Graphify 达到 139,472 星标"
+    ],
+    "ai-web": [
+      "Anthropic 推出 Claude Managed Agents 托管服务",
+      "Frontier Red Team 展示五条可用利用链",
+      "Sonnet 4.5 上下文重置对 Opus 4.5 是累赘",
+      "OpenAI 发布三项仅元数据政策条目",
+      "OpenAI 涉及合理使用与 AI 训练偏好",
+      "OpenAI 在安全报告中增加青少年保护"
+    ],
+    "ai-hn": [
+      "Claude Code VS Code 扩展后门居 AI 帖首位",
+      "Mistral Large 4 开放权重获 1,675 分",
+      "Gemini 4 Carbon 获 1,011 分、801 条评论",
+      "AI 烧钱与泡沫救助担忧主导讨论",
+      "讨论 SRE 去技能化与 Cisco 令牌实验",
+      "评论者质疑基准质量与评测声明"
+    ],
+    "ai-arxiv": [
+      "LM 数据归因设计空间已梳理",
+      "ShallowDefend 面向多轮越狱防御",
+      "Multi-View MoE 让每个路由器塑造专家",
+      "智能体迈向自主科学实验",
+      "研究计算机使用验证与持久记忆",
+      "基础模型扩展至 EHR 风险预测"
+    ],
+    "ai-community": [
+      "工具过度暴露每轮成本 $0.148",
+      "数据库支持的智能体记忆引发讨论",
+      "KV-cache 成本成为生产关注点",
+      "共享被木马化的 Claude Code 扩展审计",
+      "新开源 AI 项目吸引贡献者",
+      "MoE 卸载在 16GB GPU 上并非总是更快"
+    ]
+  },
+  "en": {
+    "ai-cli": [
+      "OpenCode shipped three releases in 24 hours",
+      "Claude Code, Gemini CLI each shipped one release",
+      "Codex, Copilot CLI, Pi shipped no releases",
+      "Production hardening now dominates AI CLI tools",
+      "Windows/WSL behavior is a top friction point",
+      "MCP/plugin lifecycle reliability is key battlefield"
+    ],
+    "ai-agents": [
+      "OpenClaw saw 86 issues and 500 PR updates",
+      "264 OpenClaw PRs merged/closed; 236 remain open",
+      "OpenClaw beta restores Node install compatibility",
+      "P0/P1 bugs hit Windows, macOS auth, sessions",
+      "Transcript redaction is a release-blocker issue",
+      "Maintainer review bandwidth limits OpenClaw"
+    ],
+    "ai-infra": [
+      "llama.cpp shipped builds b12002 through b12017",
+      "llama.cpp saw 51 issues and 125 PR updates",
+      "LiteLLM hit 112 issues and 472 PR updates",
+      "LiteLLM released v1.109.0-dev.2 pre-release",
+      "Silent correctness failures top infra severity",
+      "vLLM, SGLang, Ollama shipped no releases"
+    ],
+    "ai-trending": [
+      "claude-mem gained +1,140 stars today",
+      "impeccable leads AI trending with +2,300 stars",
+      "DeepTutor added +2,282 stars today",
+      "jailbreaks red-team repo added +2,055 stars",
+      "career-ops holds 78,898 GitHub stars",
+      "Graphify reaches 139,472 stars"
+    ],
+    "ai-web": [
+      "Anthropic unveils Claude Managed Agents hosted service",
+      "Frontier Red Team shows five working exploit chains",
+      "Sonnet 4.5 context reset was dead weight on Opus 4.5",
+      "OpenAI posted three metadata-only policy items",
+      "OpenAI covers fair use and AI training preferences",
+      "OpenAI adds teen protections in safety report"
+    ],
+    "ai-hn": [
+      "Claude Code VS Code extension backdoor tops AI thread",
+      "Mistral Large 4 open weights scored 1,675",
+      "Gemini 4 Carbon drew 1,011 points, 801 comments",
+      "AI cash-burn and bubble-bailout fears dominate",
+      "SRE deskilling and Cisco token experiment discussed",
+      "Commenters question benchmark quality and eval claims"
+    ],
+    "ai-arxiv": [
+      "LM data attribution design space mapped",
+      "ShallowDefend targets multi-turn jailbreak defenses",
+      "Multi-View MoE lets every router shape experts",
+      "Agents move toward autonomous scientific experiments",
+      "Computer-use verification and persistent memory studied",
+      "Foundation models expand to EHR risk prediction"
+    ],
+    "ai-community": [
+      "Tool overexposure costs $0.148 per turn",
+      "Database-backed agent memory draws discussion",
+      "KV-cache costs become production concern",
+      "Trojanized Claude Code extension audit shared",
+      "New open-source AI project attracts contributors",
+      "MoE offloading is not always faster on 16GB GPU"
+    ]
+  }
+}
