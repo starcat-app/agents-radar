@@ -16,11 +16,12 @@ on:
         required: false
         type: string
   schedule:
-    # 上游通常在上海时间 10:00 后出齐报告；10:00 首拉，10:30、11:30、12:30 补拉。
-    - cron: "0 2 * * *"
-    - cron: "30 2-3 * * *"
-    # 最后一轮独立标识；仍缺稿时失败告警，不能全天静默跳过。
-    - cron: "30 4 * * *"
+    # 上游定时常被 GitHub 排队拖晚，出稿可能到中午甚至下午；
+    # 上海时间 12:00 起每小时拉一次，直到 18:00。
+    - cron: "0 4 * * *"
+    - cron: "0 5-9 * * *"
+    # 18:00 为最后一轮；仍缺稿时失败告警，不能全天静默跳过。
+    - cron: "0 10 * * *"
 
 permissions:
   contents: write
@@ -93,7 +94,7 @@ jobs:
         run: |
           printf '### Upstream publication pending\n\n%s\n' "$PENDING_REASON" >> "$GITHUB_STEP_SUMMARY"
           # 手动回放必须明确成功/失败；最后一轮也不能将未发布报告伪装成同步成功。
-          if [ "$EVENT_NAME" != "schedule" ] || [ "$TRIGGER_SCHEDULE" = "30 4 * * *" ]; then
+          if [ "$EVENT_NAME" != "schedule" ] || [ "$TRIGGER_SCHEDULE" = "0 10 * * *" ]; then
             echo "::error::$PENDING_REASON"
             exit 1
           fi
@@ -115,7 +116,7 @@ jobs:
   generate-and-publish:
     needs: route-source
     # 自生成只响应首轮调度或手动触发；补拉轮次不能重复运行付费生成路径。
-    if: needs.route-source.outputs.mode == 'starcat' && github.ref_name == github.event.repository.default_branch && (github.event_name != 'schedule' || github.event.schedule == '0 2 * * *')
+    if: needs.route-source.outputs.mode == 'starcat' && github.ref_name == github.event.repository.default_branch && (github.event_name != 'schedule' || github.event.schedule == '0 4 * * *')
     runs-on: ubuntu-latest
     timeout-minutes: 120
     steps:
